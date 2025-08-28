@@ -1,6 +1,4 @@
-# Swachh-Setu
-Smart Waste, Clean Traditions
-
+# Swach-Setu
 🚀 Tools Used
 
 RFID Hardware
