@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   BarChart,
   Bar,
@@ -14,7 +15,7 @@ import {
   LineChart,
   Line,
 } from "recharts";
-import { ChevronDown, ChevronUp, Calendar, TrendingUp, Save, Trash2, Search, X } from "lucide-react";
+import { ChevronDown, ChevronUp, Calendar, TrendingUp, Save, Trash2, Search, X, LogOut } from "lucide-react";
 
 const materialList = [
   { category: "Paper", name: "News Paper", color: "#8b5cf6" },
@@ -50,6 +51,7 @@ const materialList = [
 ];
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().slice(0, 10)
   );
@@ -102,6 +104,12 @@ export default function Dashboard() {
     setNotificationMessage(`🗑️ Deleted entry for ${date}`);
     setShowNotification(true);
     setTimeout(() => setShowNotification(false), 3000);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("auth_token");
+    localStorage.removeItem("user_email");
+    navigate("/login");
   };
 
   const toggleCategory = (category) => {
@@ -176,7 +184,11 @@ export default function Dashboard() {
               <span className="bg-white/20 px-4 py-2 rounded-lg text-sm">
                 {localStorage.getItem("user_email") || "user@example.com"}
               </span>
-              <button className="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition">
+              <button 
+                onClick={handleLogout}
+                className="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition flex items-center gap-2"
+              >
+                <LogOut size={18} />
                 Logout
               </button>
             </div>
