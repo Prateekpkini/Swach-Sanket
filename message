@@ -1,0 +1,17 @@
+git rebase -i HEAD~10
+```
+This opens the last 10 commits in your editor.
+
+### Step 3: Mark Commits to Edit
+You'll see a list like:
+```
+pick 1733f3c commit message
+pick 8c5bd8f another commit
+pick ...
+```
+
+Find the commits `1733f3c` and `8c5bd8f` (the ones with the secret), change `pick` to `edit`:
+```
+edit 1733f3c commit message
+edit 8c5bd8f another commit
+pick ...

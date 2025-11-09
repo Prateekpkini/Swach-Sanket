@@ -1,0 +1,125 @@
+# -------------------------------------------------------
+# 🌐 GLOBAL SETTINGS — Common ignores for all environments
+# -------------------------------------------------------
+
+# OS junk
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*.bak
+*.old
+*.orig
+
+# Node modules (common to backend & frontend)
+node_modules/
+**/node_modules/
+
+# Environment and secrets
+.env
+.env.local
+.env.development
+.env.production
+*/.env
+*/.env.local
+*/.env.development
+*/.env.production
+
+# Cache
+.npm/
+.pnpm/
+.cache/
+.temp/
+dist/
+tmp/
+out/
+
+# IDE / Editor configs
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# -------------------------------------------------------
+# ⚙️ BACKEND (Express, FastAPI, etc.)
+# -------------------------------------------------------
+backend/node_modules/
+backend/logs/
+backend/tmp/
+backend/dist/
+backend/build/
+backend/.env
+backend/.env.local
+backend/.cache/
+backend/coverage/
+backend/uploads/
+backend/__pycache__/
+
+# -------------------------------------------------------
+# 💻 FRONTEND (React / Next.js / Vite / Flutter Web)
+# -------------------------------------------------------
+frontend/node_modules/
+frontend/.next/
+frontend/.cache/
+frontend/.vite/
+frontend/build/
+frontend/dist/
+frontend/coverage/
+frontend/.env
+frontend/.env.local
+frontend/public/static/cache/
+frontend/public/.DS_Store
+
+# -------------------------------------------------------
+# 🧪 TESTING / COVERAGE
+# -------------------------------------------------------
+coverage/
+*.lcov
+.nyc_output/
+cypress/videos/
+cypress/screenshots/
+jest-test-results.json
+playwright-report/
+test-output/
+
+# -------------------------------------------------------
+# 🐳 DOCKER / DEPLOYMENT
+# -------------------------------------------------------
+Dockerfile*
+docker-compose*
+*.pid
+*.seed
+*.db
+*.sqlite
+*.sqlite3
+
+# -------------------------------------------------------
+# ⚙️ MISC
+# -------------------------------------------------------
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# -------------------------------------------------------
+# 📦 LOCAL DEV TOOLS
+# -------------------------------------------------------
+*.envrc
+.envrc
+.envrc.local
+.editorconfig
+"backend/.env" 

@@ -1,0 +1,136 @@
+:root {
+  --primary: #10b981;
+  --secondary: #16a34a;
+  --dark: #111827;
+  --light: #d1d5db;
+  --card-bg: #1f2937;
+}
+
+.container {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--dark);
+  color: white;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+  padding-bottom: 4rem;
+}
+
+.particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.particle {
+  position: absolute;
+  background-color: var(--primary);
+  border-radius: 50%;
+}
+
+.header {
+  padding: 4rem 1rem 2rem;
+  text-align: center;
+  z-index: 1;
+  position: relative;
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--primary);
+}
+
+.header p {
+  color: var(--light);
+  font-size: 1.1rem;
+}
+
+.statsSection {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+  z-index: 1;
+  position: relative;
+}
+
+.wardCard {
+  background-color: var(--card-bg);
+  border-left: 4px solid var(--primary);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.wardCard:hover {
+  transform: translateY(-5px);
+}
+
+.wardCard h2 {
+  margin-bottom: 0.5rem;
+  color: var(--primary);
+}
+
+.wardCard p {
+  font-size: 1.2rem;
+  color: var(--light);
+}
+
+.footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--light);
+  font-size: 0.95rem;
+  z-index: 1;
+  position: relative;
+}
+
+/* Animations */
+@keyframes float {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-15px) rotate(5deg);
+  }
+
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+.dispatchBtn {
+  margin-top: 1rem;
+  background-color: var(--primary);
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.dispatchBtn:hover {
+  background-color: var(--secondary);
+}
+
+.chartSection {
+  padding: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.chartHeading {
+  text-align: center;
+  color: var(--primary);
+  margin-bottom: 1rem;
+  font-size: 1.6rem;
+}
