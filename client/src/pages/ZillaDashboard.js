@@ -598,7 +598,7 @@
 // }
 
 import React, { useState, useEffect ,useCallback} from 'react';
-import { Plus, Trash2, MapPin, TrendingUp, AlertCircle, CheckCircle, Mail, Lock, Eye, EyeOff, Copy, Check, RefreshCw } from 'lucide-react';
+import { Plus, Trash2, MapPin, TrendingUp, AlertCircle, CheckCircle, Mail, Lock, Eye, EyeOff, Copy, Check, RefreshCw,LogOut} from 'lucide-react';
 
 
 export default function MRFDashboard() {
@@ -880,6 +880,16 @@ const fetchPlantData = useCallback(async () => {
               >
                 <RefreshCw size={20} className={loading ? 'animate-spin' : ''} />
               </button>
+              <button
+              onClick={() => {
+                localStorage.removeItem("auth_token");
+                window.location.href = "/";
+              }}
+              className="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition flex items-center gap-2"
+            >
+              <LogOut size={18} />
+              <span>Logout</span>
+            </button>
             </div>
           </div>
           
