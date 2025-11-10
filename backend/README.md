@@ -72,7 +72,11 @@ Persistent data storage using MongoDB.
    JWT_SECRET=your-super-secret-jwt-key
    PORT=5000
    CLIENT_ORIGIN=http://localhost:3000
+   GEMINI_API_KEY=your-gemini-api-key-here
+   GEMINI_MODEL=gemini-1.5-flash
    ```
+   
+   **Note:** `GEMINI_API_KEY` is required for the compliance report generation endpoint. You can get an API key from [Google AI Studio](https://aistudio.google.com/app/apikey).
 
 #### Database Setup
 1. Make sure MongoDB is running on your system
@@ -174,6 +178,177 @@ View all users in memory (development only)
       "createdAt": "2025-11-08T04:07:06.373Z"
     }
   ]
+}
+```
+
+### Compliance Reports
+
+#### POST /api/compliance/generate
+Generate a compliance report based on provided data. Requires authentication.
+
+Request Body:
+```json
+{
+  "meta": {
+    "taluk": "Mangalore",
+    "panchayat": "Neermarga",
+    "vehicleRegNo": "KA19AA5525"
+  },
+  "date": "2025-11-08",
+  "metrics": {
+    "segregationHouseholdsRate": 0.85,
+    "segregationShopsRate": 0.90,
+    "wetMgmtEfficiency": 0.98,
+    "sanitaryDisposalEfficiency": 0.95,
+    "dryStorageRatio": 0.10,
+    "perHouseholdWasteKg": 3.15,
+    "score": 88,
+    "band": "Good"
+  },
+  "inputs": {
+    "totals": {
+      "totalHouseholds": 520,
+      "totalShops": 60
+    },
+    "day": {
+      "households": 501,
+      "commercialShops": 54,
+      "wetWasteCollected": 980.04,
+      "wetWasteManaged": 971.42,
+      "sanitaryWasteCollected": 27.51,
+      "sanitaryWasteScientificallyDisposed": 26.34,
+      "dryWasteCollected": 563.04,
+      "dryWasteStored": 57.66
+    },
+    "weekToDate": {
+      "weekStartDate": "2025-11-01",
+      "daysCount": 7,
+      "avgSegregationHouseholdsRate": 0.82,
+      "avgSegregationShopsRate": 0.88,
+      "avgWetMgmtEfficiency": 0.96,
+      "avgSanitaryDisposalEfficiency": 0.93,
+      "avgDryStorageRatio": 0.12,
+      "avgPerHouseholdWasteKg": 3.05,
+      "avgScore": 85,
+      "avgHouseholds": 490,
+      "avgCommercialShops": 52,
+      "avgWetWasteCollected": 950.00,
+      "avgWetWasteManaged": 940.00,
+      "avgSanitaryWasteCollected": 25.00,
+      "avgSanitaryWasteScientificallyDisposed": 24.00,
+      "avgDryWasteCollected": 550.00,
+      "avgDryWasteStored": 60.00
+    }
+  }
+}
+```
+
+Response:
+```json
+{
+  "success": true,
+  "report": {
+    "gpAccountHolderSummary": "Wet waste management efficiency remained above 95%...",
+    "supervisorySummary": "Comprehensive summary from supervisory viewpoint...",
+    "zpMrfSummary": "Brief summary for district or MRF monitoring...",
+    "recommendations": [
+      "Recommendation 1",
+      "Recommendation 2"
+    ],
+    "risks": [
+      "Risk 1",
+      "Risk 2"
+    ],
+    "notes": "Optional contextual information",
+    "dataIrregularities": []
+  },
+  "meta": {
+    "taluk": "Mangalore",
+    "panchayat": "Neermarga",
+    "vehicleRegNo": "KA19AA5525",
+    "date": "2025-11-08"
+  }
+}
+```
+
+**Note:** This endpoint requires `GEMINI_API_KEY` to be set in your `.env` file. The API uses Google's Gemini models to generate compliance reports.
+
+#### POST /api/compliance/generate-from-entry
+Generate a compliance report from entry data (material weights) + operational metadata. This endpoint automatically calculates metrics from the provided data.
+
+Request Body:
+```json
+{
+  "meta": {
+    "taluk": "Mangalore",
+    "panchayat": "Neermarga",
+    "vehicleRegNo": "KA19AA5525"
+  },
+  "date": "2025-11-08",
+  "entryId": "690f50316cd4140df5d26dca",
+  "entryData": {
+    "News Paper": 20,
+    "PET bottle": 20,
+    "Cardboard": 2
+  },
+  "totals": {
+    "totalHouseholds": 520,
+    "totalShops": 60
+  },
+  "day": {
+    "households": 501,
+    "commercialShops": 54,
+    "wetWasteCollected": 980.04,
+    "wetWasteManaged": 971.42,
+    "sanitaryWasteCollected": 27.51,
+    "sanitaryWasteScientificallyDisposed": 26.34,
+    "dryWasteStored": 57.66
+  }
+}
+```
+
+**Note:** 
+- `entryId` is optional - if provided, entry data will be fetched from database
+- `entryData` is optional - if provided, will be used directly (overrides entryId)
+- `dryWasteCollected` is automatically calculated from entry data (sum of all material weights)
+- `dryWasteStored` is optional - if not provided, defaults to 10% of dry waste collected
+- All compliance metrics (segregation rates, efficiency, score, etc.) are automatically calculated
+
+Response:
+```json
+{
+  "success": true,
+  "report": {
+    "gpAccountHolderSummary": "...",
+    "supervisorySummary": "...",
+    "zpMrfSummary": "...",
+    "recommendations": [...],
+    "risks": [...],
+    "notes": "...",
+    "dataIrregularities": []
+  },
+  "meta": {
+    "taluk": "Mangalore",
+    "panchayat": "Neermarga",
+    "vehicleRegNo": "KA19AA5525",
+    "date": "2025-11-08"
+  },
+  "calculatedMetrics": {
+    "segregationHouseholdsRate": 0.85,
+    "segregationShopsRate": 0.90,
+    "wetMgmtEfficiency": 0.98,
+    "sanitaryDisposalEfficiency": 0.95,
+    "dryStorageRatio": 0.10,
+    "perHouseholdWasteKg": 3.15,
+    "score": 88,
+    "band": "Good"
+  },
+  "entryData": {
+    "dryWasteCollected": 200.5,
+    "dryWasteStored": 57.66,
+    "materialCount": 3,
+    "totalMaterialsWeight": 200.5
+  }
 }
 ```
 

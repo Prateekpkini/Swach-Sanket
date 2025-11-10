@@ -8,6 +8,7 @@ import {
   Compass,
   LogOut,
 } from "lucide-react";
+import { useI18n } from "../i18n/I18nProvider";
 
 /* ================= ROUTES ================= */
 const ROUTES = [
@@ -42,6 +43,7 @@ if (!document.getElementById("leaflet-routing-css")) {
 
 /* ================= MAIN COMPONENT ================= */
 export default function DriverDashboard() {
+  const { t } = useI18n();
   const [status, setStatus] = useState("idle");
   const [selectedRoute, setSelectedRoute] = useState(null);
   const [currentPanchayatIndex, setCurrentPanchayatIndex] = useState(0);
@@ -227,8 +229,8 @@ export default function DriverDashboard() {
                 <Navigation size={40} />
               </div>
               <div>
-                <h1 className="text-3xl font-bold">MRF Driver Dashboard</h1>
-                <p className="text-green-100">Select route for navigation</p>
+                <h1 className="text-3xl font-bold">{t("driver.headerTitle")}</h1>
+                <p className="text-green-100">{t("driver.headerSubtitle")}</p>
               </div>
             </div>
 
@@ -240,7 +242,7 @@ export default function DriverDashboard() {
               className="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition flex items-center gap-2"
             >
               <LogOut size={18} />
-              <span>Logout</span>
+              <span>{t("actions.logout")}</span>
             </button>
           </div>
 
@@ -260,14 +262,14 @@ export default function DriverDashboard() {
                 <div className="p-6">
                   <div className="flex items-center gap-2 mb-4">
                     <Home className="text-gray-500" size={18} />
-                    <span>{r.panchayats.length} Panchayats</span>
+                    <span>{r.panchayats.length} {t("driver.panchayatsCount")}</span>
                   </div>
                   <button
                     onClick={() => startRoute(r)}
                     className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold flex justify-center gap-2 items-center"
                   >
                     <Play size={20} />
-                    Start Navigation
+                    {t("driver.startNav")}
                   </button>
                 </div>
               </div>
@@ -291,7 +293,7 @@ export default function DriverDashboard() {
               onClick={resetRoute}
               className="bg-white/20 hover:bg-white/30 px-3 py-1 rounded-lg flex items-center gap-2"
             >
-              <Square size={16} /> Stop
+              <Square size={16} /> {t("driver.stop")}
             </button>
           </div>
         </div>
@@ -299,13 +301,13 @@ export default function DriverDashboard() {
         <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden mb-6">
           <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-4 flex justify-between">
             <h3 className="font-bold flex items-center gap-2">
-              <Navigation size={20} /> Turn-by-Turn Navigation
+              <Navigation size={20} /> {t("driver.turnByTurn")}
             </h3>
             <button
               onClick={() => setShowMap(!showMap)}
               className="bg-white/20 hover:bg-white/30 px-3 py-1 rounded-lg text-sm"
             >
-              {showMap ? "Hide" : "Show"}
+              {showMap ? t("driver.hide") : t("driver.show")}
             </button>
           </div>
 
@@ -316,7 +318,7 @@ export default function DriverDashboard() {
               ) : (
                 <div className="h-full flex items-center justify-center text-white">
                   <Locate size={48} className="animate-spin opacity-50" />
-                  <p>Loading map...</p>
+                  <p>{t("driver.loadingMap")}</p>
                 </div>
               )}
 
@@ -324,7 +326,7 @@ export default function DriverDashboard() {
               {userLocation && currentPanchayat && (
                 <div className="absolute bottom-4 left-4 right-4 bg-white rounded-xl shadow-lg p-4 flex justify-between items-center">
                   <div>
-                    <div className="text-sm text-gray-500">Current Speed</div>
+                    <div className="text-sm text-gray-500">{t("driver.currentSpeed")}</div>
                     <div className="text-3xl font-bold text-blue-600">{speed} km/h</div>
                   </div>
                   <div className="text-center">
@@ -336,7 +338,7 @@ export default function DriverDashboard() {
                     <div className="text-sm font-semibold text-gray-600">{getDirection(heading)}</div>
                   </div>
                   <div className="text-right">
-                    <div className="text-sm text-gray-500">Next Stop</div>
+                    <div className="text-sm text-gray-500">{t("driver.nextStop")}</div>
                     <div className="font-bold">{currentPanchayat.name}</div>
                     {distanceToNext != null && (
                       <div className="text-gray-600 text-sm">
@@ -356,10 +358,10 @@ export default function DriverDashboard() {
           {distanceToNext !== null && currentPanchayat && (
             <p>
               {distanceToNext < 0.3
-                ? `Arriving at ${currentPanchayat.name}`
+                ? `${t("driver.arrivingAt").replace("{name}", currentPanchayat.name)}`
                 : heading !== null
-                ? `Head ${getDirection(heading)} towards ${currentPanchayat.name}`
-                : `Navigating towards ${currentPanchayat.name}`}
+                ? `${t("driver.headTowards").replace("{dir}", getDirection(heading)).replace("{name}", currentPanchayat.name)}`
+                : `${t("driver.navigatingTowards").replace("{name}", currentPanchayat.name)}`}
             </p>
           )}
         </div>

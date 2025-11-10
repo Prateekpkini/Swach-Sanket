@@ -1,13 +1,12 @@
 import api from "./api";
 
-// 🧩 GET /api/entries?dateKey=YYYY-MM-DD
-export const getEntryByDate = async (dateKey) => {
+// 🧩 GET /api/transactions?dateKey=YYYY-MM-DD
+export const getTransactionsByDate = async (dateKey) => {
   try {
-    const res = await api.get(`/api/entries?dateKey=${dateKey}`);
-    return res.data.entry || { dateKey, data: {} };
+    const res = await api.get(`/api/transactions?dateKey=${dateKey}`);
+    return res.data.transactions || [];
   } catch (error) {
     if (error.response?.status === 401) {
-      // Token expired or invalid - clear storage and redirect to login
       localStorage.removeItem("auth_token");
       localStorage.removeItem("user_email");
       localStorage.removeItem("user_name");
@@ -20,14 +19,13 @@ export const getEntryByDate = async (dateKey) => {
   }
 };
 
-// 🧩 PUT /api/entries/:dateKey
-export const upsertEntry = async (dateKey, data) => {
+// 🧩 POST /api/transactions
+export const createTransaction = async (transactionData) => {
   try {
-    const res = await api.put(`/api/entries/${dateKey}`, { data });
-    return res.data.entry;
+    const res = await api.post(`/api/transactions`, transactionData);
+    return res.data.transaction;
   } catch (error) {
     if (error.response?.status === 401) {
-      // Token expired or invalid - clear storage and redirect to login
       localStorage.removeItem("auth_token");
       localStorage.removeItem("user_email");
       localStorage.removeItem("user_name");
@@ -40,14 +38,32 @@ export const upsertEntry = async (dateKey, data) => {
   }
 };
 
-// 🧩 DELETE /api/entries/:dateKey
-export const deleteEntryByDate = async (dateKey) => {
+// 🧩 GET /api/transactions/history?limit=30
+export const getTransactionsHistory = async (limit = 30) => {
   try {
-    const res = await api.delete(`/api/entries/${dateKey}`);
+    const res = await api.get(`/api/transactions/history?limit=${limit}`);
+    return res.data.transactions || [];
+  } catch (error) {
+    if (error.response?.status === 401) {
+      localStorage.removeItem("auth_token");
+      localStorage.removeItem("user_email");
+      localStorage.removeItem("user_name");
+      localStorage.removeItem("user_role");
+      localStorage.removeItem("user_id");
+      window.location.href = "/login";
+      throw new Error("Session expired. Please login again.");
+    }
+    throw error;
+  }
+};
+
+// 🧩 DELETE /api/transactions/:id
+export const deleteTransaction = async (id) => {
+  try {
+    const res = await api.delete(`/api/transactions/${id}`);
     return res.data;
   } catch (error) {
     if (error.response?.status === 401) {
-      // Token expired or invalid - clear storage and redirect to login
       localStorage.removeItem("auth_token");
       localStorage.removeItem("user_email");
       localStorage.removeItem("user_name");
@@ -60,22 +76,3 @@ export const deleteEntryByDate = async (dateKey) => {
   }
 };
 
-// 🧩 GET /api/entries/history?limit=30
-export const getEntriesHistory = async (limit = 30) => {
-  try {
-    const res = await api.get(`/api/entries/history?limit=${limit}`);
-    return res.data.entries || [];
-  } catch (error) {
-    if (error.response?.status === 401) {
-      // Token expired or invalid - clear storage and redirect to login
-      localStorage.removeItem("auth_token");
-      localStorage.removeItem("user_email");
-      localStorage.removeItem("user_name");
-      localStorage.removeItem("user_role");
-      localStorage.removeItem("user_id");
-      window.location.href = "/login";
-      throw new Error("Session expired. Please login again.");
-    }
-    throw error;
-  }
-};

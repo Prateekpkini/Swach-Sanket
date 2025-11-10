@@ -218,8 +218,11 @@ import React, { useState, useEffect, useRef } from "react";
 import { Lock, Mail, Eye, EyeOff, Leaf, AlertCircle, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
+import { useI18n } from "../i18n/I18nProvider";
+import LanguageSwitcher from "../components/LanguageSwitcher";
 
 export default function LoginPage() {
+  const { t } = useI18n();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -326,14 +329,18 @@ export default function LoginPage() {
         <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
           {/* Header */}
           <div className="bg-gradient-to-r from-emerald-500 to-teal-600 p-8 text-center">
+            {/* Inline language toggle for login page */}
+            {/* <div className="absolute top-3 right-3">
+              <LanguageSwitcher position="relative" className="!text-xs" />
+            </div> */}
             <div className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-full mb-4">
               <Leaf className="w-8 h-8 text-emerald-600" />
             </div>
             <h1 className="text-2xl font-bold text-white mb-2">
-              Swach Sanket MRF Portal
+              {t("login.portalTitle")}
             </h1>
             <p className="text-emerald-50 text-sm">
-              Smart Waste Management System
+              {t("login.portalSubtitle")}
             </p>
           </div>
 
@@ -355,7 +362,7 @@ export default function LoginPage() {
               {/* Email */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Email Address
+                  {t("login.emailLabel")}
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -375,7 +382,7 @@ export default function LoginPage() {
               {/* Password */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Password
+                  {t("login.passwordLabel")}
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -411,7 +418,7 @@ export default function LoginPage() {
                     className="h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-gray-300 rounded"
                   />
                   <span className="ml-2 text-sm text-gray-600">
-                    Remember me
+                    {t("login.rememberMe")}
                   </span>
                 </label>
                 <button
@@ -419,7 +426,7 @@ export default function LoginPage() {
                   onClick={() => alert("Password recovery coming soon!")}
                   className="text-sm font-medium text-emerald-600 hover:text-emerald-700 underline"
                 >
-                  Forgot password?
+                  {t("login.forgotPassword")}
                 </button>
               </div>
 
@@ -451,10 +458,10 @@ export default function LoginPage() {
                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                       ></path>
                     </svg>
-                    Signing in...
+                    {t("login.signingIn")}
                   </span>
                 ) : (
-                  "Sign In"
+                  t("login.signIn")
                 )}
               </button>
             </form>
@@ -468,7 +475,7 @@ export default function LoginPage() {
                 <div className="relative flex justify-center text-sm">
                   <span className="px-2 bg-white text-gray-500 flex items-center gap-1">
                     <Users className="w-4 h-4" />
-                    Quick Demo Login
+                    {t("login.quickDemo")}
                   </span>
                 </div>
               </div>
@@ -479,26 +486,26 @@ export default function LoginPage() {
                   onClick={() => quickLogin("zilla_panchayat")}
                   className="w-full px-4 py-2 border border-emerald-500 text-emerald-700 rounded-lg hover:bg-emerald-50 transition-colors text-sm font-medium"
                 >
-                  🏛️ Login as Admin (Zilla Panchayat)
+                  🏛️ {t("login.demoAdmin")}
                 </button>
                 <button
                   type="button"
                   onClick={() => quickLogin("mrf_operator")}
                   className="w-full px-4 py-2 border border-blue-500 text-blue-700 rounded-lg hover:bg-blue-50 transition-colors text-sm font-medium"
                 >
-                  👷 Login as MRF Operator
+                  👷 {t("login.demoOperator")}
                 </button>
                 <button
                   type="button"
                   onClick={() => quickLogin("mrf_driver")}
                   className="w-full px-4 py-2 border border-purple-500 text-purple-700 rounded-lg hover:bg-purple-50 transition-colors text-sm font-medium"
                 >
-                  🚛 Login as MRF Driver
+                  🚛 {t("login.demoDriver")}
                 </button>
               </div>
 
               <p className="mt-4 text-xs text-gray-500 text-center">
-                Click a button above to auto-fill credentials and sign in automatically
+                {t("login.autoFillHint")}
               </p>
             </div>
           </div>
@@ -506,7 +513,7 @@ export default function LoginPage() {
 
         {/* Footer */}
         <p className="text-center text-white text-sm mt-6">
-          © 2024 Swach Sanket. All rights reserved.
+          {t("login.footer")}
         </p>
       </div>
     </div>
